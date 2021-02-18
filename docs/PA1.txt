@@ -1,0 +1,267 @@
+Project Overview
+
+* Basic manager supports
+	* data structures to represent and manage processes and resources
+	* operations invoked by processes to:
+		* create and destroy processes
+		* request and release resources
+	* timeout function to mimic preemtive scheduling
+* Presentation shell allows testing without actual processes and hardware
+* Extended manager
+	* resources can have multiple identical units
+	* processes have different priorities and are scheduling accordingly
+
+Process state
+* A process can be in one of three states: ready, running, blocked
+* Possible state transitions
+
+
+
+		 		Running
+		two way /	 \ (point to block)
+
+NEW ----> Ready < ------ Block
+
+Representation of Processes
+
+* Each process is represented by a process control block (PCB)
+* PCBs are organized as fixed-size array, PCB[N]
+
+State: Integer
+Parent: Integer
+Children: Linked list ---> Integer
+Resources: Linked list ---> Integer
+
+* State running state can be implicit: head of ready list
+	* ready and blocked are implemented explicitly: integer or binary (1 and 0)
+* Parent: index of process that created process i
+* Children linked list of processes that process i has created
+	* each element contains index of child process
+* Resources: Linked list of resources that process i is currently holding
+	* each element contains the index of a resource
+
+List of processes
+
+* Manager maintains all PCBs on one of several list:
+	* blocked processes: kept on waiting list associated with resources
+	* ready processes: kept on a Ready list (RL)
+
+* Basic manager version:
+	* all processes have same priority
+	* RL is organized as a single linked list of PCB indices
+
+* At system initialization:
+	* process 0 is created automatically and becomes the first running process
+	* all other processes are created and destroyed at run time
+
+Process creation
+
+Currently running process i, can create a new child process, j, using the function
+
+create()
+	allocate new PCB[j]
+	sate = ready
+	insert j into list of children of i
+	parent = i
+	children = NULL
+	resources = NULL
+	insert j into RL
+	display: "process j created"
+
+Process destruction
+
+* Currently running process, i, can destroy a child process, j, or itself (i=j)
+* The function also recursively destroy all of j's descendants
+	* reason for destroying entire subtree: avoid orphan processes
+
+destroy(j)
+	for all k in children of j destroy(k)
+	remove j from parent's list of children
+	remove j from RL or waiting list
+	release all resources of j 
+	free PCB of j
+	display: "n processes destroyed"
+
+Representation of resources
+
+* System supports a fixed set of resources created at system initialization
+* Any process may request, acquire, and later release resource
+* When resource is unavailable, the requesting process becomes blocked
+* Each resource is represented by a resource control block (RCB)
+* RCBs are organized as fixed-size array, RCB[M], analogous to PCBs
+* Each resource RCB[R] has the form:
+	State: Integer
+	Waitlist: Linked list -> integer
+State: free or allocated (1 and 0)
+Waitlist: linked list of processes blocked on the resource
+
+Requesting a resource 
+Currently running process, i, may request any of the resources, r, at any time:
+request(r)
+	if state of r is free
+		state of r = allocated
+		insert r into list of resources if process i
+		display: "resource r allocated"
+	else
+		state of i = blocked
+		move i from RL to waitlist of r
+		display: "process i blocked"
+		scheduler()
+
+Releasing a resource
+
+* Currently running process, i, may release any of the resources, r, it is holding: 
+releaser(r)
+	remove r from resources list of process i
+	if waitlist of r is empty
+		state of r = free
+	else 
+		move process j from the head of waitlist of r to RL
+		state of j = ready
+		insert r into resources list of process j
+	display: "resource r released"
+
+Time-sharing
+* Basic manager version: all processes have the same priority
+	* RL is a single linked list of PCBs accessed in FIFO order
+	* process at the head of RL is the currently running process
+* System mimics preemptive scheduling by a function timeout 
+
+timeout()
+	move process i from head of RL to end of RL
+	scheduler()
+
+* New process, j, now at the head of RL becomes the running process
+
+* Repeatedly invoking timeout mimics time-sharing
+
+Scheduler
+* Scheduler performs context switch from currently running process i to a new process j 
+* Scheduler is called whenever:
+	* process i blocks on a resource and is removed from RL
+	* timeout functions moves the process to the end of the RL
+* In a real system, context switch:
+	* saves CPU state of running process i
+	* loads CPU state of new process j
+* In this project we do not have physical CPU to save and restore registers
+	* scheduler only displays which process is currently running process
+
+scheduler()
+	find process i currently at the head of RL
+	display: "process i running"
+
+System initialization 
+
+* When system starts, create data structures PCB[n], RCB[M], RL
+* In addition to the functions create, destroy, request, release, timeout:
+	implement init() function:
+	* all PCB entries  are initialized to free except PCB[0]
+	* PCB[0] is a running process with no parent, no children, and no resource
+	* RL contains process 0
+* init allows continuous testing of the system without having to repeatedly terminate and restart of the program
+
+Error handling
+* Functions must implements checks to detect illegal/unexpected operation
+* Examples:
+	* Creating more than n processes 
+	* Destroying a process that is not a child of the current process
+	* Requesting a nonexistanse resource
+	* Requesting a resource the process is already holding
+	* Releasing a resource the process is not holding
+	* Process 0 should be prevented from requesting any resource to avoiod deadlock where no process is on RL
+
+* In each case, the corresponding function should display "error" and exit
+
+The presentation Shell
+
+* We do not have access to CPU, hardware interrupts, or executable process code 
+* Presentation shell: allow testing and demonstration of manager
+	* repeatedly accepts commands from user terminal
+	* invokes corresponding manager function
+	* displays feedback messages on the screen
+(while loop) f = function, par = parameter
+repeat 
+	get f, par
+	invoke f(par)
+	get reply
+	display reply
+
+* user terminal represents the currently running process
+* user terminal also represents the hardware: timeout function is an interrupt
+
+Shell syntax and an example
+Skoða fyrilestur fyrir ítarlegi upplýsingar
+Shell command  Function
+	cr ---> 		create()
+de <i> --->		destroy(i)
+rq <i> --->		request(r)
+rl <r> --->		release(r)
+to	   --->		timeout()
+in	   --->		init()
+
+Multilevel scheduling
+
+* Each process has fixed priority, represented by a positive integer
+* RL is extended to segregate processes into FIFO lists according to priorities
+* Each list element contains PCB index of the corresponding process
+* For this project, RL has 3 priority levels
+
+* Initially: 
+	* lowest level 0, contains 1 process (process 0)
+	* priority levels 1 and 2 are empty
+
+Extensions to basic manager
+
+PCBs:
+	* new field, priority, is included in each PCB: 0, 1 or 2
+
+* Functions:
+	* create function must accept priority value p as an argument: create(p)
+		* p is stored in the priority field of the new PCB
+		* process is entered at the corresponding level in RL
+	* some functions must call scheduler at the end:
+		* create: context switch if new process has higher priority than current
+		* release: context switch if release unblocks a higher-priority process
+		* delete: context switch if a deleted process release a resource on which a higher-level process is blocked
+
+scheduler()
+	find highest priority ready process j
+	display: "process j running"
+
+	* j: head of highest-priority non-empty list (RL)
+	* real scheduler may perform context switch
+	* implicit in our case:
+		if currently running process is still the head of the highest priority no context switch
+		* if any functions has changed the head of that list: context switch
+	
+	* Shell:
+		* cr command must accept priority value: cr p
+		* additional error checks to deal with priority, e.g., priority >3 or <0
+
+Summary of specific tasks
+
+Sjá fyrilestur fyrir ýtarlegri útskýringar
+
+* Design and implement the extended version fo the manager:
+	* PCB, RCB and data structures
+	* functions create(), destroy(), request(), release(), timeout(), scheduler(), init()
+* Design and implement the shell
+* Instantiate manager to include the following at start-up:
+	* A process descriptor array PCB[16]
+	* A resource descriptor array RCB[4] with multiunit resource
+	* A ready list RL with 3 priority levels (0,1,2)
+* Test the manager using a variety of command sequences to explore all aspects
+
+
+
+
+
+
+
+
+
+
+
+
+
+
