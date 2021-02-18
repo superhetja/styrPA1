@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include "../constants/sizes.cpp"
 #include "PCB.cpp"
 #include "RCB.cpp"
 using namespace std;
@@ -40,8 +40,8 @@ Manager::~Manager()
 }
 //should init all list aand get back to square 0
 void Manager::init(){
-    processes = new PCB*[16];
-    resoucres = new RCB*[4];
+    processes = new PCB*[PCB_SIZE];
+    resoucres = new RCB*[RCB_SIZE];
 
     create(0);
 }
@@ -71,3 +71,59 @@ void Manager::clearLists() {
         _processes->pop();
     }
 }
+
+void Manager::destroy(){
+    /*
+    destroy(j)
+	for all k in children of j destroy(k)
+	remove j from parent's list of children
+	remove j from RL or waiting list
+	release all resources of j 
+	free PCB of j
+	display: "n processes destroyed"
+    */
+}
+
+void Manager::request(){
+    /*
+	if state of r is free
+		state of r = allocated
+		insert r into list of resources if process i
+		display: "resource r allocated"
+	else
+		state of i = blocked
+		move i from RL to waitlist of r
+		display: "process i blocked"
+		scheduler()
+    */
+}
+
+void Manager::release(){
+    /*
+	remove r from resources list of process i
+	if waitlist of r is empty
+		state of r = free
+	else 
+		move process j from the head of waitlist of r to RL
+		state of j = ready
+		insert r into resources list of process j
+	display: "resource r released"
+    */
+}
+
+void Manager::timeout(){
+    /*
+    timeout()
+	move process i from head of RL to end of RL
+	scheduler()
+    */
+}
+
+void Manager::scheduler(){
+    /*
+    scheduler()
+	find process i currently at the head of RL
+	display: "process i running"
+    */
+}
+
