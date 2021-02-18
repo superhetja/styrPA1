@@ -10,6 +10,7 @@ using namespace std;
 void shell(string commands);
 string getNextWord(string command);
 string getFirstWord(string command);
+Manager *manager;
 
 int main(int argc, char *argv[]){
     if (argc > 1){
@@ -29,6 +30,8 @@ void shell(string commands){
     if (command == string("in")){
         //TODO init()
         cout << "init" << endl;
+        manager = new Manager();
+
     }
     else if (command == string("cr")){
         integer = stoi(getNextWord(commands));

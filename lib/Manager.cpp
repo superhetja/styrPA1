@@ -10,11 +10,12 @@ class Manager
 private:
     int _myNumber; //how many processes we have
     PCB **processes;
-    RCB **resoucres;
+    RCB **resources;
     queue<PCB*> *_processes; //PCB queue
 
 
-    Manager(queue<PCB*> *processes);
+public:
+    Manager();
     ~Manager();
     void init();
     void destroy();
@@ -23,28 +24,31 @@ private:
     void timeout(); // mögulega annarstaðar
     void scheduler();
     void clearLists();
-public:
     void create(int priority);
     void setMyNumber(int myNumber);
 };
 // Constructor
-Manager::Manager(queue<PCB*> *processes)
-{
-    _processes = processes;
-    cout << "Manager was created" << endl;
+//should init all list aand get back to square 0
+Manager::Manager(){
+    processes = new PCB*[PCB_SIZE];
+    resources = new RCB*[RCB_SIZE];
+    for(int i = 0; i < RCB_SIZE; i++){
+        resources[i] = new RCB();
+    }
+    
+    cout << "resoucres:" << endl;
+    cout << resources[0] << endl;
+
+    create (0);
+
+    //create(0);
 }
+
 // Deconstructor
 Manager::~Manager()
 {
     clearLists();
     cout << "Manager was deleted" << endl;
-}
-//should init all list aand get back to square 0
-void Manager::init(){
-    processes = new PCB*[PCB_SIZE];
-    resoucres = new RCB*[RCB_SIZE];
-
-    create(0);
 }
 
 void Manager::setMyNumber(int myNumber){
