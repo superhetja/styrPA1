@@ -11,6 +11,8 @@ public:
     void removeFromWaitList();
     bool isFree();
     void changeState();
+    friend ostream& operator<<(ostream& out, const RCB *rcb);
+    
 };
 
 RCB::RCB()
@@ -37,4 +39,11 @@ void RCB::removeFromWaitList(){
 
 void RCB::changeState(){
     _state = !_state;
+}
+
+ostream& operator<<(ostream& out, const RCB *rcb){
+    out << "RCB state: (";
+    out << rcb->_state;
+    out << ")";
+    return out;
 }

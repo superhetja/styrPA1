@@ -22,7 +22,7 @@ public:
 PCB::PCB(int priority)
 {
     _state = READY;
-    _priority = priority;
+    _priority = priority;   
     
 }
 

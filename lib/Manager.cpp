@@ -3,6 +3,7 @@
 #include "PCB.cpp"
 #include "LinkedList.cpp"
 #include "RCB.cpp"
+
 using namespace std;
 
 class Manager
@@ -37,9 +38,9 @@ Manager::Manager(){
     }
     
     cout << "resoucres:" << endl;
-    cout << resources[0] << endl;
+    cout << resources[1] << endl;
 
-    create (0);
+    //create (0);
 
     //create(0);
 }
