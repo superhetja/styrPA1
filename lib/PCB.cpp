@@ -9,7 +9,7 @@ private:
     bool _state;
     PCB* _parent;
     queue<PCB*> _children;
-    queue<int*>  _resources; // index of the rcb
+    LinkedListInt  *_resources; // index of the rcb
     int _priority;
 
 
@@ -20,8 +20,8 @@ public:
     void changeState();
     void setParent(PCB *process);
     void addChild(PCB *process);
-    void addResources(int *resource);
-    void removeResource();
+    void addResources(int resource);
+    void removeResource(int resource);
     friend ostream& operator<<(ostream& out, const PCB *pcb);
     
 };
@@ -46,12 +46,12 @@ void PCB::setParent(PCB *process) {
 void PCB::addChild(PCB *process) {
     _children.push(process);
 }
-void PCB::addResources(int *resource){
-    _resources.push(resource);
+void PCB::addResources(int resource){
+    _resources->createNode(resource);
 }
 
-void PCB::removeResource(){
-    _resources.pop();
+void PCB::removeResource(int resource){
+    _resources->removeNode(resource);
 }
 
 ostream& operator<<(ostream& out, const PCB *pcb){

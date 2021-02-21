@@ -1,3 +1,6 @@
+#include <iostream>
+using namespace std;
+
 class NodeInt { 
 public: 
     int data; 
@@ -12,7 +15,8 @@ public:
     LinkedListInt();
     ~LinkedListInt();
     void createNode(int i);
-    void removeNode();
+    void removeNode(int i);
+    NodeInt* getHead();
 };
 
 LinkedListInt::LinkedListInt() {
@@ -39,8 +43,30 @@ void LinkedListInt::createNode(int i){
 }
 
 // is this right with only 1 or 2 nodes?
-void LinkedListInt::removeNode(){
+void LinkedListInt::removeNode(int i){
     NodeInt *temp = head;
-    head = temp->next;
-    temp = NULL;
+    
+    if (temp->data == i) {head = temp->next;}
+    else {
+        while (temp->next != NULL ){
+            if (temp->next->data == i){
+                if (temp->next == tail){
+                    tail = temp;
+                    tail->next = NULL;
+                    break;
+                }
+                else {
+                    temp->next = temp->next->next;
+
+                }
+            }
+            
+        temp = temp->next;        
+        }
+    }
+    
+    delete temp;
 }
+    NodeInt* LinkedListInt::getHead(){
+        return head;
+    }
