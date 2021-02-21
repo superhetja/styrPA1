@@ -9,7 +9,7 @@ private:
     int _state;
     PCB* _parent;
     queue<PCB*> *_children;
-    queue<RCB*>  *_resources; // index of the rcb
+    queue<int*>  *_resources; // index of the rcb
     int _priority;
 
 
