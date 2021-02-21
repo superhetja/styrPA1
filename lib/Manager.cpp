@@ -12,7 +12,7 @@ class Manager
 {
 private:
     int _myNumber; //how many processes we have
-    LinkedList *processes;
+    queue<PCB*> *processes;
     RCB **resources;
     PCB* running;
 
@@ -34,14 +34,13 @@ public:
 //should init all list aand get back to square 0
 Manager::Manager(){
     running = NULL;
-    processes = new LinkedList();
     resources = new RCB*[RCB_SIZE];
     for(int i = 0; i < RCB_SIZE; i++){
         resources[i] = new RCB();
     }
     
 
-    //create (0);
+    create(0);
 
     //create(0);
 }
@@ -64,21 +63,22 @@ void Manager::create(int priority){
     // (j is the new process, i is its parent)
     if (running != NULL){
         running->addChild(myNewPCB);
+        myNewPCB->setParent(running);
     }
     // parent = i
-    myNewPCB->setParent(running);
     // children = NULL
     // resource = NULL
     //insert j into RL (ready list)
-    processes->createNode(myNewPCB);
+    processes->push(myNewPCB);
     // display "process j created"
     cout << "Process " << myNewPCB << " created" << endl;
 }
     // delete myNewPCB          <---
 
 void Manager::clearLists() {
-    while(!processes->isEmpty()) {
-        processes->removeNode();
+    while(!processes->empty()) {
+        delete processes->front();
+        processes->pop();
     }
 }
 
