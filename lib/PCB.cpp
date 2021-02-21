@@ -19,6 +19,7 @@ public:
     int test();
     void setParent(PCB *process);
     void addChild(PCB *process);
+    friend ostream& operator<<(ostream& out, const PCB *pcb);
 };
 
 PCB::PCB(int priority) {
@@ -41,3 +42,9 @@ void PCB::addChild(PCB *process) {
     _children->push(process);
 }
 
+ostream& operator<<(ostream& out, const PCB *pcb){
+    out << "PCB data: (";
+    out << pcb->_resources;
+    out << ")";
+    return out;
+}
