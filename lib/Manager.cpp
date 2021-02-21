@@ -60,11 +60,9 @@ void Manager::create(int priority){
     PCB* myNewPCB = new PCB(priority);
     // insert j into list of children i
     // (j is the new process, i is its parent)
-    if (running != NULL){
-        running->addChild(myNewPCB);
+    if (!processes.empty()){
+        processes.front()->addChild(myNewPCB);
         myNewPCB->setParent(running);
-    } else {
-        running = myNewPCB;
     }
     // parent = i
     // children = NULL
@@ -129,6 +127,10 @@ void Manager::timeout(){
 	move process i from head of RL to end of RL
 	scheduler()
     */
+   //TODO check if running
+   processes.push(processes.front());
+   processes.pop();
+   scheduler();
 }
 
 void Manager::scheduler(){
@@ -138,5 +140,6 @@ void Manager::scheduler(){
 	find process i currently at the head of RL
 	display: "process i running"
     */
+   cout << "Process " << processes.front() << " running" << endl;
 }
 
