@@ -1,5 +1,5 @@
 #include <iostream>
-#include "queue"
+//#include "queue"
 #include "../constants/sizes.cpp"
 #include "LinkedListInt.cpp"
 #include "PCB.cpp"
@@ -13,7 +13,7 @@ class Manager
 {
 private:
     int _myNumber; //how many processes we have
-    queue<PCB*> *processes;
+    queue<PCB*> processes; // was *process
     RCB **resources;
     PCB* running;
 
@@ -42,8 +42,6 @@ Manager::Manager(){
     
 
     create(0);
-
-    //create(0);
 }
 
 // Deconstructor
@@ -65,21 +63,23 @@ void Manager::create(int priority){
     if (running != NULL){
         running->addChild(myNewPCB);
         myNewPCB->setParent(running);
+    } else {
+        running = myNewPCB;
     }
     // parent = i
     // children = NULL
     // resource = NULL
     //insert j into RL (ready list)
-    processes->push(myNewPCB);
+    processes.push(myNewPCB);
     // display "process j created"
     cout << "Process " << myNewPCB << " created" << endl;
 }
     // delete myNewPCB          <---
 
 void Manager::clearLists() {
-    while(!processes->empty()) {
-        delete processes->front();
-        processes->pop();
+    while(!processes.empty()) {
+        delete processes.front();
+        processes.pop();
     }
 }
 
