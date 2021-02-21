@@ -45,5 +45,7 @@ ostream& operator<<(ostream& out, const PCB *pcb){
     out << "PCB data: (";
     out << pcb->_state;
     out << ")";
+    out << " Childrens: ";
+    out << pcb->_children.size();
     return out;
 }

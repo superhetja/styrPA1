@@ -134,12 +134,12 @@ void Manager::timeout(){
 }
 
 void Manager::scheduler(){
-    processes->front();
+    processes.front();
     /*
     scheduler()
 	find process i currently at the head of RL
 	display: "process i running"
     */
-   cout << "Process " << processes->front() << " running";
+   cout << "Process " << processes.front() << " running";
 }
 
