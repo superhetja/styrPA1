@@ -8,8 +8,8 @@ class PCB
 private:
     int _state;
     PCB* _parent;
-    LinkedListInt *_children;
-    LinkedListInt *_resources; // index of the rcb
+    queue<PCB*> *_children;
+    queue<RCB*>  *_resources; // index of the rcb
     int _priority;
 
 
@@ -24,9 +24,8 @@ public:
 PCB::PCB(int priority) {
     _state = READY;
     _priority = priority;
-    _resources = new LinkedListInt();  
-    _children = new LinkedListInt();
-    _parent = NULL; 
+    _resources = NULL;  
+    _children = NULL; 
     
 }
 
@@ -39,6 +38,6 @@ void PCB::setParent(PCB *process) {
 }
 
 void PCB::addChild(PCB *process) {
-    _children->createNode(process);
+    _children->push(process);
 }
 
