@@ -58,6 +58,7 @@ void shell(string commands){
     }
     else if (command == string("to")){
         //TODO timeout()
+        manager->timeout();
         cout << "Timeout" << endl;
     }
     else {
