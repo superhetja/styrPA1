@@ -119,6 +119,18 @@ void Manager::release(int integer){
 		insert r into resources list of process j
 	display: "resource r released"
     */
+   RCB* r = resources[integer];
+
+   processes.removeResource(integer);
+   if(r->hasWaitingProcesses()){
+       PCB* j = r->popWatingList();
+       processes.push(j);
+       j.changeState();
+       j.addResources(&integer);
+
+   } else {
+       r->changeState();
+   }
 }
 
 void Manager::timeout(){
@@ -134,12 +146,11 @@ void Manager::timeout(){
 }
 
 void Manager::scheduler(){
-    processes->front();
     /*
     scheduler()
 	find process i currently at the head of RL
 	display: "process i running"
     */
-   cout << "Process " << processes->front() << " running";
+   cout << "Process " << processes.front() << " running" << endl;;
 }
 
