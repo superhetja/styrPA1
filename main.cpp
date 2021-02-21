@@ -35,22 +35,25 @@ void shell(string commands){
     }
     else if (command == string("cr")){
         integer = stoi(getNextWord(commands));
-        //TODO create()
+        manager->create(integer);
         cout << "cr" << " " << "Integer: " << integer << endl;
     }
     else if (command == string("de")){
         //TODO destroy()
         integer = stoi(getNextWord(commands));
+        manager->destroy(integer);
         cout << "destroy" << endl;
     }
     else if (command == string("rq")){
         //TODO request()
         integer = stoi(getNextWord(commands));
+        manager->request(integer);
         cout << "request" << " " << "Integer: " << integer << endl;
     }
     else if (command == string("rl")){
         //TODO release()
         integer = stoi(getNextWord(commands));
+        manager->release(integer);
         cout << "release" << " " << "Integer: " << integer << endl;
     }
     else if (command == string("to")){

@@ -6,6 +6,7 @@
 #include "LinkedList.cpp"
 #include "RCB.cpp"
 
+
 using namespace std;
 
 class Manager
@@ -21,9 +22,9 @@ public:
     Manager();
     ~Manager();
     void init();
-    void destroy();
-    void request();
-    void release();
+    void destroy(int);
+    void request(int);
+    void release(int);
     void timeout(); // mögulega annarstaðar
     void scheduler();
     void clearLists();
@@ -82,19 +83,20 @@ void Manager::clearLists() {
     }
 }
 
-void Manager::destroy(){
-    /*
-    destroy(j)
-	for all k in children of j destroy(k)
-	remove j from parent's list of children
-	remove j from RL or waiting list
-	release all resources of j 
-	free PCB of j
-	display: "n processes destroyed"
-    */
+void Manager::destroy(int integer){
+    
+    //destroy(j)
+    
+	//for all k in children of j destroy(k)
+	//remove j from parent's list of children
+	//remove j from RL or waiting list
+	//release all resources of j 
+	//free PCB of j
+	//display: "n processes destroyed"
+    
 }
 
-void Manager::request(){
+void Manager::request(int integer){
     /*
 	if state of r is free
 		state of r = allocated
@@ -108,7 +110,7 @@ void Manager::request(){
     */
 }
 
-void Manager::release(){
+void Manager::release(int integer){
     /*
 	remove r from resources list of process i
 	if waitlist of r is empty
@@ -130,6 +132,7 @@ void Manager::timeout(){
 }
 
 void Manager::scheduler(){
+     
     /*
     scheduler()
 	find process i currently at the head of RL
