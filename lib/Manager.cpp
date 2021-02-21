@@ -11,9 +11,9 @@ class Manager
 {
 private:
     int _myNumber; //how many processes we have
-    PCB **processes;
+    LinkedList *processes;
     RCB **resources;
-    queue<PCB*> *_processes; //PCB queue
+    PCB* running;
 
 
 public:
@@ -32,14 +32,13 @@ public:
 // Constructor
 //should init all list aand get back to square 0
 Manager::Manager(){
-    processes = new PCB*[PCB_SIZE];
+    running = NULL;
+    processes = new LinkedList();
     resources = new RCB*[RCB_SIZE];
     for(int i = 0; i < RCB_SIZE; i++){
         resources[i] = new RCB();
     }
     
-    cout << "resoucres:" << endl;
-    cout << resources[1] << endl;
 
     //create (0);
 
@@ -62,20 +61,23 @@ void Manager::create(int priority){
     PCB* myNewPCB = new PCB(priority);
     // insert j into list of children i
     // (j is the new process, i is its parent)
-
+    if (running != NULL){
+        running->addChild(myNewPCB);
+    }
     // parent = i
+    myNewPCB->setParent(running);
     // children = NULL
     // resource = NULL
     //insert j into RL (ready list)
-    _processes->push(myNewPCB);
+    processes->createNode(myNewPCB);
     // display "process j created"
+    cout << "Process " << myNewPCB << " created" << endl;
 }
-    // delete myNewPCB
+    // delete myNewPCB          <---
 
 void Manager::clearLists() {
-    while(!_processes->empty()) {
-        delete _processes->front();
-        _processes->pop();
+    while(!processes->isEmpty()) {
+        processes->removeNode();
     }
 }
 

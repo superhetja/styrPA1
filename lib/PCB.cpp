@@ -8,7 +8,7 @@ class PCB
 private:
     int _state;
     PCB* _parent;
-    LinkedList *_children;
+    LinkedListInt *_children;
     LinkedListInt *_resources; // index of the rcb
     int _priority;
 
@@ -25,7 +25,8 @@ PCB::PCB(int priority) {
     _state = READY;
     _priority = priority;
     _resources = new LinkedListInt();  
-    _children = new LinkedList(); 
+    _children = new LinkedListInt();
+    _parent = NULL; 
     
 }
 

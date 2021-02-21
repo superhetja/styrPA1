@@ -13,6 +13,7 @@ public:
     ~LinkedList();
     void createNode(PCB* process);
     void removeNode();
+    bool isEmpty();
 };
 
 LinkedList::LinkedList() {
@@ -43,4 +44,8 @@ void LinkedList::removeNode(){
     Node *temp = head;
     head = temp->next;
     temp = NULL;
+}
+
+bool LinkedList::isEmpty(){
+    return head == NULL;
 }
