@@ -4,16 +4,17 @@ class RCB
 private:
     bool _state; //true if free else false
     LinkedListInt *_waitlist; //TODO fix coorect value
+
 public:
     RCB();
     ~RCB();
-    void addToWaitList(PCB *process);
-    void removeProcess(PCB *prcess);
+    void addToWaitList(int process);
+    void removeProcess(int process);
     bool isFree();
     void changeState();
     friend ostream& operator<<(ostream& out, const RCB *rcb);
     bool hasWaitingProcesses();
-    PCB* popWatingList();
+    int popWatingList();
     
 };
 
@@ -35,17 +36,15 @@ bool RCB::isFree(){
 }
 
 void RCB::removeProcess(int process){
-    _waitlist.pop();
+    _waitlist->removeNode(process);
 }
 
 bool RCB::hasWaitingProcesses(){
-    return !_waitlist.size() == 0;
+    return !_waitlist->isEmpty();
 }
 
-PCB* RCB::popWatingList(){
-    PCB* j = _waitlist.front();
-    _waitlist.pop();
-    return j;
+int RCB::popWatingList(){
+    return _waitlist->removeFirst();
 }
 
 
