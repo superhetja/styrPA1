@@ -1,30 +1,21 @@
-class Klassi{
-public:
-  int number;
-  int another;
-  int* addNumbers();
-  Klassi();
-};
+#include "queue"
+#include "iostream"
+#include "./lib/LinkedListInt.cpp"
+using namespace std; 
 
-Klassi::Klassi(){
-  number = 0;
-  another = 0;
-}
+int main(){
+  
+  LinkedListInt *a = new LinkedListInt();
+  cout << a->isEmpty() << endl;
+  a->createNode(1);
+  a->createNode(2);
+  a->createNode(3);
+  NodeInt* node = a->getHead();
+  cout << node->data<< endl;
+  cout << node->next->data<< endl;
+  cout << node->next->next->data<< endl;
+  cout << a->isEmpty() << endl;
 
-int* Klassi::addNumbers(){
-  return &number+another;
-}
-int main() {
-  
-  Klassi *k = new Klassi();
-  k->number = 3;
-  k->another = 5;
-  
-  int *g = k->addNumbers();
-  
-  int f = 5;
-  
-  delete g;
 
   return 0;
 }
