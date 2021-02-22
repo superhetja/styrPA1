@@ -26,7 +26,7 @@ public:
 
     void addChild(int process);
     void addResources(int resource);
-    void removeResource(int resource);
+    void removeResource(int* resource);
     int* popChild();
     void removeChild(int integer);
 
@@ -81,8 +81,10 @@ void PCB::addResources(int resource){
     _resources->createNode(new int(resource));
 }
 
-void PCB::removeResource(int resource){
-    _resources->removeNode(new int(resource));
+void PCB::removeResource(int* resource){
+    if(hasResource(resource)){
+        _resources->removeNode(resource);
+    }
 }
 
 

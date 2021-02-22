@@ -5,6 +5,8 @@
 
 #include "lib/Manager.cpp"
 #include "constants/priority.cpp"
+
+#include <cstdio>
 using namespace std;
 
 void shell(string commands);
@@ -13,6 +15,7 @@ string getFirstWord(string command);
 Manager *manager;
 
 int main(int argc, char *argv[]){
+    freopen("output.txt","w",stdout);
     if (argc > 1){
         ifstream myFile(argv[1]);
         for(string line; getline(myFile, line);){
@@ -61,7 +64,7 @@ void shell(string commands){
         //cout << "Timeout" << endl;
     }
     else {
-        cout << "-1" << endl;
+        cout << endl;
     }
 }
 

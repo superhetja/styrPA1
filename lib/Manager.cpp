@@ -29,7 +29,7 @@ public:
     int recDestroy(int, int);
     void request(int);
     void release(int);
-    void releaseFromProcess(int resource, int* process);
+    void releaseFromProcess(int* resource, int* process);
     void timeout(); // mögulega annarstaðar
     void scheduler();
     void clearLists();
@@ -100,28 +100,43 @@ void Manager::clearLists() {
 int Manager::recDestroy(int integer, int count){
     PCB* p = processes[integer];
     int* index = new int(integer);
-    cout << "inside destroy" << endl;
     while(p->hasChildren()){
         count += recDestroy(*p->popChild(), count);
     }
     //p->getParent()->removeChild(integer);
     if(p->isReady()){
         readyList->removeProcess(index, *p->getPriority());
-    } else {
+    }/* else {
+    
         NodeInt *head = p->getResources()->getHead();
+        cout << "inside destroy" << endl;
         while(head != nullptr){
+            cout << "whileloop" << endl;
             if(resources[*head->data]->hasWaitingProcess(index)){
+                cout << "insdie if" << endl;
                 resources[*head->data]->removeProcess(index);
                 break;
             }
+            head = head->next;
         }
 
         
-    }
+    }*/
     //TODO: release all resources of j
     LinkedListInt *ll = p->getResources();
+    int* i;
     while(*ll->getSize() != 0){
-        releaseFromProcess(*ll->removeFirst(), &integer);
+        i = ll->removeFirst();
+        if(!p->isReady()){
+            if(resources[*i]->hasWaitingProcess(index)){
+                resources[*i]->removeProcess(index);
+            } else {
+                releaseFromProcess(i, index);
+            }
+        } else {
+            releaseFromProcess(i, index);
+        }
+
     }
 
 	//free PCB of j
@@ -131,14 +146,17 @@ int Manager::recDestroy(int integer, int count){
 }
 
 void Manager::destroy(int integer){
-    cout << "Here" << endl;
     
     //destroy(j)
 	//for all k in children of j destroy(k)
-    int count = recDestroy(integer, 0);
+    if (integer > PCB_SIZE || !processes[integer]){
+        cout << -1;
+    } else {
+        int count = recDestroy(integer, 0);
+        scheduler();
+    }
 
     //cout << count << " processes destroyed" << endl;
-    scheduler();
 	//display: "n processes destroyed"
 
     
@@ -158,6 +176,10 @@ void Manager::request(int integer){
     */
    //check if has resource or on waitlist
     //resoucre 
+    if( integer>RCB_SIZE || !resources[integer]){
+        cout << -1;
+        return;
+    }
     int* index = readyList->getFirst();
     PCB* p = processes[*readyList->getFirst()];
     RCB* r = resources[integer];
@@ -177,6 +199,12 @@ void Manager::request(int integer){
 }
 
 void Manager::release(int integer){
+    PCB* p = processes[*readyList->getFirst()];
+    int* index = new int(integer);
+    if(!p->hasResource(index)){
+        cout << -1;
+        return;
+    }
     /*
 	remove r from resources list of process i
 	if waitlist of r is empty
@@ -187,7 +215,7 @@ void Manager::release(int integer){
 		insert r into resources list of process j
 	display: "resource r released"
     */
-    releaseFromProcess(integer, readyList->getFirst());   
+    releaseFromProcess(index, readyList->getFirst());   
    /*
    RCB* r = resources[integer];
 
@@ -206,16 +234,15 @@ void Manager::release(int integer){
    scheduler();
 }
 
-void Manager::releaseFromProcess(int resource, int* process){
-    RCB* r = resources[resource];
+void Manager::releaseFromProcess(int* resource, int* process){
+    RCB* r = resources[*resource];
     PCB* p = processes[*process];
-
     p->removeResource(resource);
     if(r->hasWaitingProcesses()){
         PCB* j = processes[*r->popWatingList()];
         readyList->addProcess(new int(j->getIndex()),*j->getPriority());
         j->changeState();
-        j->addResources(resource);
+        j->addResources(*resource);
 
     } else {
         r->changeState();
@@ -242,6 +269,6 @@ void Manager::scheduler(){
 	display: "process i running"
     */
    //cout << "Process " << *readyList->getFirst() << " running" << endl;;
-   cout << *readyList->getFirst() << " "<< endl ;
+   cout << *readyList->getFirst() << " ";
 }
 
