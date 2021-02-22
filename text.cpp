@@ -10,11 +10,11 @@ int main(){
   a->createNode(1);
   a->createNode(2);
   a->createNode(3);
-  cout << a->isEmpty() << endl;
   NodeInt* node = a->getHead();
   cout << node->data<< endl;
   cout << node->next->data<< endl;
   cout << node->next->next->data<< endl;
+  cout << a->isEmpty() << endl;
 
 
   return 0;
