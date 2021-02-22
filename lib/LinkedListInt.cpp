@@ -54,10 +54,9 @@ void LinkedListInt::createNode(int *i){
 // is this right with only 1 or 2 nodes?
 void LinkedListInt::removeNode(int *i){
     NodeInt *temp = head;
-    
     if (*temp->data == *i) {
         head = temp->next;
-        }
+    }
     else {
         while (temp->next != nullptr ){
             if (*temp->next->data == *i){
@@ -92,6 +91,7 @@ int* LinkedListInt::removeFirst(){
     head = node->next;
     int *i = node->data;
     delete node;
+    _size--;
     return i;
 }
 

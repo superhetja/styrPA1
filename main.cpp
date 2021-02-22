@@ -29,7 +29,6 @@ void shell(string commands){
     string command = getFirstWord(commands);
     if (command == string("in")){
         //TODO init()
-        //cout << "init" << endl;
         manager = new Manager();
 
     }

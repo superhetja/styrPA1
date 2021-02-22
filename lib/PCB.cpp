@@ -96,8 +96,7 @@ bool PCB::hasResources(){
 }
 
 int* PCB::popChild(){
-    int* p = _children->removeFirst();
-    return p;
+    return _children->removeFirst();
 }
 
 void PCB::removeChild(int integer){

@@ -9,7 +9,7 @@ public:
     RCB();
     ~RCB();
     void addToWaitList(int* process);
-    void removeProcess(int process);
+    void removeProcess(int* process);
     void changeState();
     friend ostream& operator<<(ostream& out, const RCB *rcb);
     int* popWatingList();
@@ -40,8 +40,8 @@ bool RCB::isFree(){
     return this->_state;
 }
 
-void RCB::removeProcess(int process){
-    _waitlist->removeNode(new int(process));
+void RCB::removeProcess(int* process){
+    _waitlist->removeNode(process);
 }
 
 bool RCB::hasWaitingProcesses(){

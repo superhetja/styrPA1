@@ -99,17 +99,26 @@ void Manager::clearLists() {
 
 int Manager::recDestroy(int integer, int count){
     PCB* p = processes[integer];
+    int* index = new int(integer);
+    cout << "inside destroy" << endl;
     while(p->hasChildren()){
         count += recDestroy(*p->popChild(), count);
     }
-    p->getParent()->removeChild(integer);
+    //p->getParent()->removeChild(integer);
     if(p->isReady()){
-        //TODO: remove j from readylist
+        readyList->removeProcess(index, *p->getPriority());
     } else {
-        //TODO: remove j from waitinglist 
+        NodeInt *head = p->getResources()->getHead();
+        while(head != nullptr){
+            if(resources[*head->data]->hasWaitingProcess(index)){
+                resources[*head->data]->removeProcess(index);
+                break;
+            }
+        }
+
+        
     }
     //TODO: release all resources of j
-    RCB* r;
     LinkedListInt *ll = p->getResources();
     while(*ll->getSize() != 0){
         releaseFromProcess(*ll->removeFirst(), &integer);
@@ -117,10 +126,12 @@ int Manager::recDestroy(int integer, int count){
 
 	//free PCB of j
     delete processes[integer]; //dont know
+    availablePCBIndex->push(integer);
     return 1;
 }
 
 void Manager::destroy(int integer){
+    cout << "Here" << endl;
     
     //destroy(j)
 	//for all k in children of j destroy(k)
@@ -154,15 +165,15 @@ void Manager::request(int integer){
         if (r->isFree()){
             r->changeState();
             p->addResources(integer);
-            cout << "resource " << integer << " allocated" << endl;
+            //cout << "resource " << integer << " allocated" << endl;
         } else {
             p->changeState();
             r->addToWaitList(index);
-            cout << "process " << p << " blocked" << endl;
+            //cout << "process " << p << " blocked" << endl;
             readyList->removeProcess(index, *p->getPriority());
-            scheduler();
         }
     }
+    scheduler();
 }
 
 void Manager::release(int integer){
@@ -231,6 +242,6 @@ void Manager::scheduler(){
 	display: "process i running"
     */
    //cout << "Process " << *readyList->getFirst() << " running" << endl;;
-   cout << *readyList->getFirst() << " ";
+   cout << *readyList->getFirst() << " "<< endl ;
 }
 

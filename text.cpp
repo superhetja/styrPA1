@@ -6,15 +6,19 @@ using namespace std;
 int main(){
   
   LinkedListInt *a = new LinkedListInt();
-  a->createNode(new int(3));
-  a->createNode(new int(4));
-  a->createNode(new int(7));
-  a->removeFirst();
+  int* three = new int(3);
+  int* five = new int(5);
+  int* six = new int(6);
+  a->createNode(three);
+  a->createNode(five);
+  a->createNode(six);
+  a->removeNode(five);
+  a->removeNode(three);
+  cout << "here" << endl;
+  a->removeNode(six);
+  cout << "here" << endl;
   NodeInt* haus = a->getHead();
-  cout << *haus->data <<endl;
-  haus = haus->next;
-  cout << *haus->data <<endl;
-  cout << a->hasElement(new int(3))<< endl;
+
   
 
 
