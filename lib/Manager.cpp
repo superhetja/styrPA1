@@ -125,8 +125,8 @@ void Manager::release(int integer){
    if(r->hasWaitingProcesses()){
        PCB* j = r->popWatingList();
        processes.push(j);
-       j.changeState();
-       j.addResources(&integer);
+       j->changeState();
+       j->addResources(&integer);
 
    } else {
        r->changeState();
