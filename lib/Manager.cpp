@@ -139,6 +139,7 @@ void Manager::request(int integer){
 		display: "process i blocked"
 		scheduler()
     */
+   int index = readyList.front()->getIndex();
    RCB* r = resources[integer];
    if (r->isFree()){
        r->changeState();
@@ -147,7 +148,7 @@ void Manager::request(int integer){
    } else {
        PCB* p = readyList.front();
        p->changeState();
-       r->addToWaitList(p);
+       r->addToWaitList(index);
        cout << "process " << p << " blocked" << endl;
        scheduler();
        delete p;
