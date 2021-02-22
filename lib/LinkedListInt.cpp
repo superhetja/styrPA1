@@ -5,6 +5,7 @@ class NodeInt {
 public: 
     int* data; 
     NodeInt* next; 
+    bool operator==(int* integer);
 }; 
 
 class LinkedListInt
@@ -21,6 +22,7 @@ public:
     NodeInt* getHead();
     int* removeFirst();
     void doStuff();
+    bool hasElement(int*);
 };
 
 LinkedListInt::LinkedListInt() {
@@ -53,12 +55,12 @@ void LinkedListInt::createNode(int *i){
 void LinkedListInt::removeNode(int *i){
     NodeInt *temp = head;
     
-    if (temp->data == i) {
+    if (*temp->data == *i) {
         head = temp->next;
         }
     else {
         while (temp->next != nullptr ){
-            if (temp->next->data == i){
+            if (*temp->next->data == *i){
                 NodeInt* node = temp->next;
                 if (temp->next == tail){
                     tail = temp;
@@ -93,6 +95,17 @@ int* LinkedListInt::removeFirst(){
     return i;
 }
 
-void LinkedListInt::doStuff(){
-    cout << "someStuf" << endl;
+
+bool LinkedListInt::hasElement(int* i){
+    //if(head == nullptr){ return false; }
+    NodeInt* node = head;
+    while (node != nullptr){
+        if (*node->data == *i){
+            return true;
+        }
+        node = node->next;
+    }
+    return false;
+    
 }
+

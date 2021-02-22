@@ -10,11 +10,13 @@ public:
     ~RCB();
     void addToWaitList(int process);
     void removeProcess(int process);
-    bool isFree();
     void changeState();
     friend ostream& operator<<(ostream& out, const RCB *rcb);
-    bool hasWaitingProcesses();
     int* popWatingList();
+
+    bool isFree();
+    bool hasWaitingProcesses();
+    bool hasWaitingProcess(int*);
     
 };
 
@@ -29,6 +31,7 @@ RCB::~RCB()
 }
 
 void RCB::addToWaitList(int process){
+
     _waitlist->createNode(new int(process));
 
 }
@@ -42,8 +45,11 @@ void RCB::removeProcess(int process){
 }
 
 bool RCB::hasWaitingProcesses(){
-    NodeInt* n = _waitlist->getHead();
-    return _waitlist->getSize() != 0;
+    return *_waitlist->getSize() != 0;
+}
+
+bool RCB::hasWaitingProcess(int* integer){
+    return _waitlist->hasElement(integer);
 }
 
 int* RCB::popWatingList(){

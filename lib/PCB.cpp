@@ -35,6 +35,7 @@ public:
     bool hasResources();
     bool isReady();
     bool hasChildren();
+    bool hasResource(int*);
     
     friend ostream& operator<<(ostream& out, const PCB *pcb);
 };
@@ -54,6 +55,11 @@ PCB::~PCB() {
 bool PCB::isReady(){
     return _state;
 }
+
+bool PCB::hasResource(int* integer){
+    return _resources->hasElement(integer);
+}
+
 void PCB::changeState(){
     _state = !_state;
 }
@@ -80,11 +86,11 @@ void PCB::removeResource(int resource){
 
 
 bool PCB::hasChildren(){
-    return _children->getSize() != 0;
+    return *_children->getSize() != 0;
 }
 
 bool PCB::hasResources(){
-    return _resources->getSize() != 0;
+    return *_resources->getSize() != 0;
 }
 
 int* PCB::popChild(){

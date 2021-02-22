@@ -107,7 +107,7 @@ int Manager::recDestroy(int integer, int count){
     //TODO: release all resources of j
     RCB* r;
     LinkedListInt *ll = p->getResources();
-    while(ll->getSize() != 0){
+    while(*ll->getSize() != 0){
         releaseFromProcess(*ll->removeFirst(), p);
     }
 
@@ -141,22 +141,24 @@ void Manager::request(int integer){
 		display: "process i blocked"
 		scheduler()
     */
-   int index = readyList.front()->getIndex();
-   RCB* r = resources[integer];
-   if (r->isFree()){
-       r->changeState();
-       readyList.front()->addResources(integer);
-       cout << "resource " << integer << " allocated" << endl;
-   } else {
-       PCB* p = readyList.front();
-       p->changeState();
-       r->addToWaitList(index);
-       cout << "process " << p << " blocked" << endl;
-       readyList.pop();
-       scheduler();
-       delete p;
-   }
-   delete r;
+   //check if has resource or on waitlist
+    //resoucre 
+    int index = readyList.front()->getIndex();
+    RCB* r = resources[integer];
+    if( (!r->hasWaitingProcess(new int(index))) && (!readyList.front()->hasResource(new int(integer)))){
+        if (r->isFree()){
+            r->changeState();
+            readyList.front()->addResources(integer);
+            cout << "resource " << integer << " allocated" << endl;
+        } else {
+            PCB* p = readyList.front();
+            p->changeState();
+            r->addToWaitList(index);
+            cout << "process " << p << " blocked" << endl;
+            readyList.pop();
+            scheduler();
+        }
+    }
 }
 
 void Manager::release(int integer){
@@ -221,6 +223,6 @@ void Manager::scheduler(){
 	find process i currently at the head of RL
 	display: "process i running"
     */
-   cout << "Process " << readyList.front() << " running" << endl;;
+   cout << "Process " << readyList.front()->getIndex() << " running" << endl;;
 }
 
