@@ -2,6 +2,7 @@
 #include "queue"
 #include "../constants/sizes.cpp"
 #include "LinkedListInt.cpp"
+#include "PriorityQueue.cpp"
 #include "PCB.cpp"
 #include "LinkedList.cpp"
 #include "RCB.cpp"
