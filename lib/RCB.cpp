@@ -8,7 +8,7 @@ private:
 public:
     RCB();
     ~RCB();
-    void addToWaitList(int process);
+    void addToWaitList(int* process);
     void removeProcess(int process);
     void changeState();
     friend ostream& operator<<(ostream& out, const RCB *rcb);
@@ -30,9 +30,9 @@ RCB::~RCB()
 {
 }
 
-void RCB::addToWaitList(int process){
+void RCB::addToWaitList(int* process){
 
-    _waitlist->createNode(new int(process));
+    _waitlist->createNode(process);
 
 }
 

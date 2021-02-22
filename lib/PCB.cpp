@@ -14,6 +14,7 @@ private:
     int _PCBIndex;
 
 
+
 public:
     PCB(int priority);
     ~PCB();
@@ -21,6 +22,7 @@ public:
     void setParent(PCB *process);
     void changeState();
     void setIndex(int i);
+    int* getPriority();
 
     void addChild(int process);
     void addResources(int resource);
@@ -121,4 +123,8 @@ ostream& operator<<(ostream& out, const PCB *pcb){
 
 int PCB::getIndex(){
     return _PCBIndex;
+}
+
+int* PCB::getPriority(){
+    return &_priority;
 }
