@@ -1,5 +1,5 @@
 #include <iostream>
-//#include "queue"
+#include "queue"
 #include "../constants/sizes.cpp"
 #include "LinkedListInt.cpp"
 #include "PCB.cpp"
@@ -17,6 +17,7 @@ private:
     PCB **processes;
     RCB **resources;
     PCB* running;
+    queue<int> *availablePCBIndex;
 
 
 public:
@@ -38,10 +39,15 @@ public:
 //should init all list aand get back to square 0
 Manager::Manager(){
     _myNumber = 0;
+    availablePCBIndex = new queue<int>;
+
     processes = new PCB*[PCB_SIZE];
     resources = new RCB*[RCB_SIZE];
     for(int i = 0; i < RCB_SIZE; i++){
         resources[i] = new RCB();
+    }
+    for (int i = 0; i < PCB_SIZE; i++){
+        availablePCBIndex->push(i);
     }
     
 
@@ -59,11 +65,11 @@ Manager::~Manager()
 void Manager::create(int priority){
     // allocate new PCB[j]
     PCB* myNewPCB = new PCB(priority);
-    processes[_myNumber] = myNewPCB;
+    processes[availablePCBIndex->front()] = myNewPCB;
     // insert j into list of children i
     // (j is the new process, i is its parent)
     if (!readyList.empty()){
-        readyList.front()->addChild(_myNumber);
+        readyList.front()->addChild(availablePCBIndex->front());
         myNewPCB->setParent(readyList.front());
     }
     // parent = i
@@ -73,7 +79,7 @@ void Manager::create(int priority){
     readyList.push(myNewPCB);
     // display "process j created"
     cout << "Process " << myNewPCB << " created" << endl;
-    _myNumber++;
+    availablePCBIndex->pop();
 }
     // delete myNewPCB          <---
 

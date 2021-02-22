@@ -11,7 +11,7 @@ private:
     LinkedListInt *_children;
     LinkedListInt  *_resources; // index of the rcb
     int _priority;
-    int _pcbIndex;
+    int _PCBIndex;
 
 
 public:
@@ -30,6 +30,7 @@ public:
 
     PCB* getParent();
     LinkedListInt* getResources();
+    int getIndex();
 
     bool hasResources();
     bool isReady();
@@ -60,7 +61,7 @@ void PCB::setParent(PCB *process) {
 }
 
 void PCB::setIndex(int i){
-    _pcbIndex = i;
+    _PCBIndex = i;
 }
 
 void PCB::addChild(int process) {
@@ -107,4 +108,8 @@ ostream& operator<<(ostream& out, const PCB *pcb){
     out << pcb->_state;
     out << ")";
     return out;
+}
+
+int PCB::getIndex(){
+    return _PCBIndex;
 }
