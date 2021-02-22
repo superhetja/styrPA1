@@ -16,7 +16,9 @@ public:
     ~LinkedListInt();
     void createNode(int i);
     void removeNode(int i);
+    bool isEmpty();
     NodeInt* getHead();
+    int removeFirst();
 };
 
 LinkedListInt::LinkedListInt() {
@@ -46,27 +48,41 @@ void LinkedListInt::createNode(int i){
 void LinkedListInt::removeNode(int i){
     NodeInt *temp = head;
     
-    if (temp->data == i) {head = temp->next;}
+    if (temp->data == i) {
+        head = temp->next;
+        }
     else {
         while (temp->next != NULL ){
             if (temp->next->data == i){
+                NodeInt* node = temp->next;
                 if (temp->next == tail){
                     tail = temp;
                     tail->next = NULL;
-                    break;
-                }
-                else {
+                } else {
                     temp->next = temp->next->next;
-
                 }
+                delete node;
+                break;
             }
             
-        temp = temp->next;        
+            temp = temp->next;        
         }
     }
-    
-    delete temp;
+    temp = nullptr;
+    //delete temp;
 }
-    NodeInt* LinkedListInt::getHead(){
-        return head;
-    }
+NodeInt* LinkedListInt::getHead(){
+    return head;
+}
+
+bool LinkedListInt::isEmpty(){
+    return head == NULL;
+}
+
+int LinkedListInt::removeFirst(){
+    NodeInt* node = head;
+    head = node->next;
+    int i = node->data;
+    delete node;
+    return i;
+}

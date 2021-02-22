@@ -1,26 +1,30 @@
-#include "./lib/LinkedListInt.cpp"
+class Klassi{
+public:
+  int number;
+  int another;
+  int* addNumbers();
+  Klassi();
+};
 
-#include <iostream>
-using namespace std;
-int main(int argc, char const *argv[])
-{
-    LinkedListInt* head = new LinkedListInt();
-    head->createNode(1);
-    head->createNode(2);
-    head->createNode(3);
-    head->removeNode(3);
-    NodeInt *haus = head->getHead();
+Klassi::Klassi(){
+  number = 0;
+  another = 0;
+}
+
+int* Klassi::addNumbers(){
+  return &number+another;
+}
+int main() {
   
-    cout << haus->data << endl;
-    haus = haus->next;
-    cout << haus->data << endl;
-    haus = haus->next;
-    cout << haus->data << endl;
-    haus = haus->next;
-    cout << haus->data << endl;
-    haus = haus->next;
+  Klassi *k = new Klassi();
+  k->number = 3;
+  k->another = 5;
+  
+  int *g = k->addNumbers();
+  
+  int f = 5;
+  
+  delete g;
 
-    
-
-
+  return 0;
 }

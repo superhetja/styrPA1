@@ -3,12 +3,12 @@ class RCB
 {
 private:
     bool _state; //true if free else false
-    queue<PCB*> _waitlist; //TODO fix coorect value
+    LinkedListInt *_waitlist; //TODO fix coorect value
 public:
     RCB();
     ~RCB();
     void addToWaitList(PCB *process);
-    void removeFromWaitList();
+    void removeProcess(PCB *prcess);
     bool isFree();
     void changeState();
     friend ostream& operator<<(ostream& out, const RCB *rcb);
@@ -26,15 +26,15 @@ RCB::~RCB()
 {
 }
 
-void RCB::addToWaitList(PCB *process){
-    _waitlist.push(process);
+void RCB::addToWaitList(int process){
+    _waitlist->createNode(process);
 }
 
 bool RCB::isFree(){
     return this->_state;
 }
 
-void RCB::removeFromWaitList(){
+void RCB::removeProcess(int process){
     _waitlist.pop();
 }
 

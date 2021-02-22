@@ -13,7 +13,8 @@ class Manager
 {
 private:
     int _myNumber; //how many processes we have
-    queue<PCB*> processes; // was *process
+    queue<PCB*> readyList; // was *process
+    PCB **processes;
     RCB **resources;
     PCB* running;
 
@@ -23,18 +24,21 @@ public:
     ~Manager();
     void init();
     void destroy(int);
+    int recDestroy(int, int);
     void request(int);
     void release(int);
+    void releaseFromProcess(int resource, PCB* process);
     void timeout(); // mögulega annarstaðar
     void scheduler();
     void clearLists();
     void create(int priority);
-    void setMyNumber(int myNumber);
+    //void setMyNumber(int myNumber);
 };
 // Constructor
 //should init all list aand get back to square 0
 Manager::Manager(){
-    running = NULL;
+    _myNumber = 0;
+    processes = new PCB*[PCB_SIZE];
     resources = new RCB*[RCB_SIZE];
     for(int i = 0; i < RCB_SIZE; i++){
         resources[i] = new RCB();
@@ -51,46 +55,69 @@ Manager::~Manager()
     cout << "Manager was deleted" << endl;
 }
 
-void Manager::setMyNumber(int myNumber){
-    _myNumber = myNumber;
-}
 
 void Manager::create(int priority){
     // allocate new PCB[j]
     PCB* myNewPCB = new PCB(priority);
+    processes[_myNumber] = myNewPCB;
     // insert j into list of children i
     // (j is the new process, i is its parent)
-    if (!processes.empty()){
-        processes.front()->addChild(myNewPCB);
-        myNewPCB->setParent(running);
+    if (!readyList.empty()){
+        readyList.front()->addChild(_myNumber);
+        myNewPCB->setParent(readyList.front());
     }
     // parent = i
     // children = NULL
     // resource = NULL
     //insert j into RL (ready list)
-    processes.push(myNewPCB);
+    readyList.push(myNewPCB);
     // display "process j created"
     cout << "Process " << myNewPCB << " created" << endl;
+    _myNumber++;
 }
     // delete myNewPCB          <---
 
 void Manager::clearLists() {
-    while(!processes.empty()) {
-        delete processes.front();
-        processes.pop();
+    while(!readyList.empty()) {
+        delete readyList.front();
+        readyList.pop();
     }
+}
+
+
+int Manager::recDestroy(int integer, int count){
+    PCB* p = processes[integer];
+    while(p->hasChildren()){
+        count += recDestroy(p->popChild(), count);
+    }
+    p->getParent()->removeChild(integer);
+    if(p->isReady()){
+        //TODO: remove j from readylist
+    } else {
+        //TODO: remove j from waitinglist 
+    }
+    //TODO: release all resources of j
+    RCB* r;
+    LinkedListInt *ll = p->getResources();
+    while(!ll->isEmpty()){
+        releaseFromProcess(ll->removeFirst(), p);
+    }
+
+	//free PCB of j
+    delete processes[integer]; //dont know
+    return 1;
 }
 
 void Manager::destroy(int integer){
     
     //destroy(j)
-    
 	//for all k in children of j destroy(k)
-	//remove j from parent's list of children
-	//remove j from RL or waiting list
-	//release all resources of j 
-	//free PCB of j
+    int count = recDestroy(integer, 0);
+
+    cout << count << " processes destroyed" << endl;
+
 	//display: "n processes destroyed"
+
     
 }
 
@@ -106,6 +133,20 @@ void Manager::request(int integer){
 		display: "process i blocked"
 		scheduler()
     */
+   RCB* r = resources[integer];
+   if (r->isFree()){
+       r->changeState();
+       readyList.front()->addResources(integer);
+       cout << "resource " << r << " allocated" << endl;
+   } else {
+       PCB* p = readyList.front();
+       p->changeState();
+       r->addToWaitList(p);
+       cout << "process " << p << " blocked" << endl;
+       scheduler();
+       delete p;
+   }
+   delete r;
 }
 
 void Manager::release(int integer){
@@ -119,18 +160,37 @@ void Manager::release(int integer){
 		insert r into resources list of process j
 	display: "resource r released"
     */
+    releaseFromProcess(integer, readyList.front());   
+   /*
    RCB* r = resources[integer];
 
-   processes.removeResource(integer);
+   readyList.front()->removeResource(integer);
    if(r->hasWaitingProcesses()){
        PCB* j = r->popWatingList();
-       processes.push(j);
+       readyList.push(j);
        j->changeState();
-       j->addResources(&integer);
+       j->addResources(integer);
 
    } else {
        r->changeState();
-   }
+   }*/
+    // Q: should this be called only when re(r) or also when destroy(p)?
+   cout << "resource " << integer << " realeased" << endl; 
+}
+
+void Manager::releaseFromProcess(int resource, PCB* process){
+    RCB* r = resources[resource];
+
+    process->removeResource(resource);
+    if(r->hasWaitingProcesses()){
+        PCB* j = r->popWatingList();
+        readyList.push(j);
+        j->changeState();
+        j->addResources(resource);
+
+    } else {
+        r->changeState();
+    }
 }
 
 void Manager::timeout(){
@@ -140,8 +200,8 @@ void Manager::timeout(){
 	scheduler()
     */
    //TODO check if running
-   processes.push(processes.front());
-   processes.pop();
+   readyList.push(readyList.front());
+   readyList.pop();
    scheduler();
 }
 
@@ -151,6 +211,6 @@ void Manager::scheduler(){
 	find process i currently at the head of RL
 	display: "process i running"
     */
-   cout << "Process " << processes.front() << " running" << endl;;
+   cout << "Process " << readyList.front() << " running" << endl;;
 }
 
