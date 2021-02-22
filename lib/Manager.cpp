@@ -96,7 +96,7 @@ void Manager::clearLists() {
 int Manager::recDestroy(int integer, int count){
     PCB* p = processes[integer];
     while(p->hasChildren()){
-        count += recDestroy(p->popChild(), count);
+        count += recDestroy(*p->popChild(), count);
     }
     p->getParent()->removeChild(integer);
     if(p->isReady()){
@@ -107,8 +107,8 @@ int Manager::recDestroy(int integer, int count){
     //TODO: release all resources of j
     RCB* r;
     LinkedListInt *ll = p->getResources();
-    while(!ll->isEmpty()){
-        releaseFromProcess(ll->removeFirst(), p);
+    while(ll->getSize() != 0){
+        releaseFromProcess(*ll->removeFirst(), p);
     }
 
 	//free PCB of j
@@ -146,7 +146,7 @@ void Manager::request(int integer){
    if (r->isFree()){
        r->changeState();
        readyList.front()->addResources(integer);
-       cout << "resource " << r << " allocated" << endl;
+       cout << "resource " << integer << " allocated" << endl;
    } else {
        PCB* p = readyList.front();
        p->changeState();
@@ -194,7 +194,7 @@ void Manager::releaseFromProcess(int resource, PCB* process){
     process->removeResource(resource);
     if(r->hasWaitingProcesses()){
         cout << "here" <<endl;
-        PCB* j = processes[r->popWatingList()];
+        PCB* j = processes[*r->popWatingList()];
         readyList.push(j);
         j->changeState();
         j->addResources(resource);

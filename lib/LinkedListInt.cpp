@@ -3,7 +3,7 @@ using namespace std;
 
 class NodeInt { 
 public: 
-    int data; 
+    int* data; 
     NodeInt* next; 
 }; 
 
@@ -11,30 +11,32 @@ class LinkedListInt
 {
 private:
     NodeInt *head, *tail;
+    int _size;
 public:
     LinkedListInt();
     ~LinkedListInt();
-    void createNode(int i);
-    void removeNode(int i);
-    bool isEmpty();
+    void createNode(int *i);
+    void removeNode(int *i);
+    int* getSize();
     NodeInt* getHead();
-    int removeFirst();
+    int* removeFirst();
+    void doStuff();
 };
 
 LinkedListInt::LinkedListInt() {
     head = nullptr;
     tail = nullptr;
+    _size = 0;
 }
 
 LinkedListInt::~LinkedListInt() {
     
 }
 
-void LinkedListInt::createNode(int i){
+void LinkedListInt::createNode(int *i){
     NodeInt *temp = new NodeInt();
     temp->data = i;
     temp->next = nullptr;
-    cout << "CREATE NODE "<< i <<endl;
     if(head == nullptr){
         head = temp;
         tail = temp;
@@ -43,10 +45,13 @@ void LinkedListInt::createNode(int i){
         tail = temp;
     }
     temp = nullptr;
+    _size++;
+    cout << i << endl;
+
 }
 
 // is this right with only 1 or 2 nodes?
-void LinkedListInt::removeNode(int i){
+void LinkedListInt::removeNode(int *i){
     NodeInt *temp = head;
     
     if (temp->data == i) {
@@ -70,20 +75,25 @@ void LinkedListInt::removeNode(int i){
         }
     }
     temp = nullptr;
+    _size--;
     //delete temp;
 }
 NodeInt* LinkedListInt::getHead(){
     return head;
 }
 
-bool LinkedListInt::isEmpty(){
-    return head == nullptr;
+int* LinkedListInt::getSize(){
+    return &_size;
 }
 
-int LinkedListInt::removeFirst(){
+int* LinkedListInt::removeFirst(){
     NodeInt* node = head;
     head = node->next;
-    int i = node->data;
+    int *i = node->data;
     delete node;
     return i;
+}
+
+void LinkedListInt::doStuff(){
+    cout << "someStuf" << endl;
 }

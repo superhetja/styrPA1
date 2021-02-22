@@ -3,7 +3,7 @@ class RCB
 {
 private:
     bool _state; //true if free else false
-    LinkedListInt *_waitlist; //TODO fix coorect value
+    LinkedListInt *_waitlist; 
 
 public:
     RCB();
@@ -14,7 +14,7 @@ public:
     void changeState();
     friend ostream& operator<<(ostream& out, const RCB *rcb);
     bool hasWaitingProcesses();
-    int popWatingList();
+    int* popWatingList();
     
 };
 
@@ -29,7 +29,11 @@ RCB::~RCB()
 }
 
 void RCB::addToWaitList(int process){
-    _waitlist->createNode(process);
+    _waitlist->createNode(new int(process));
+    _waitlist->doStuff();
+    int* i = _waitlist->getSize();
+    cout << i << endl;
+    _waitlist->doStuff();
 }
 
 bool RCB::isFree(){
@@ -37,14 +41,17 @@ bool RCB::isFree(){
 }
 
 void RCB::removeProcess(int process){
-    _waitlist->removeNode(process);
+    _waitlist->removeNode(new int(process));
 }
 
 bool RCB::hasWaitingProcesses(){
-    return !_waitlist->isEmpty();
+    cout <<"HERE"<<endl;
+    NodeInt* n = _waitlist->getHead();
+    cout << n->data<<endl;
+    return _waitlist->getSize() != 0;
 }
 
-int RCB::popWatingList(){
+int* RCB::popWatingList(){
     return _waitlist->removeFirst();
 }
 

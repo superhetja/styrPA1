@@ -25,7 +25,7 @@ public:
     void addChild(int process);
     void addResources(int resource);
     void removeResource(int resource);
-    int popChild();
+    int* popChild();
     void removeChild(int integer);
 
     PCB* getParent();
@@ -66,36 +66,34 @@ void PCB::setIndex(int i){
 }
 
 void PCB::addChild(int process) {
-    _children->createNode(process);
+    _children->createNode(new int(process));
 }
 
 void PCB::addResources(int resource){
-    _resources->createNode(resource);
+    _resources->createNode(new int(resource));
 }
 
 void PCB::removeResource(int resource){
-    cout << "inside remove" <<endl;
-    _resources->removeNode(resource);
-    cout << "after remove" <<endl;
+    _resources->removeNode(new int(resource));
 }
 
 
 
 bool PCB::hasChildren(){
-    return !_children->isEmpty();
+    return _children->getSize() != 0;
 }
 
 bool PCB::hasResources(){
-    return !_resources->isEmpty();
+    return _resources->getSize() != 0;
 }
 
-int PCB::popChild(){
-    int p = _children->removeFirst();
+int* PCB::popChild(){
+    int* p = _children->removeFirst();
     return p;
 }
 
 void PCB::removeChild(int integer){
-    _children->removeNode(integer);
+    _children->removeNode(new int(integer));
 }
 
 PCB* PCB::getParent(){
