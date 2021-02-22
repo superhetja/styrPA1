@@ -46,7 +46,6 @@ void LinkedListInt::createNode(int *i){
     }
     temp = nullptr;
     _size++;
-    cout << i << endl;
 
 }
 
