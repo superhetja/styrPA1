@@ -84,8 +84,9 @@ void Manager::create(int priority){
     //insert j into RL (ready list)
     readyList->addProcess(new int(myNewPCB->getIndex()), priority);
     // display "process j created"
-    cout << "Process " << myNewPCB->getIndex() << " created" << endl;
+    //cout << "Process " << myNewPCB->getIndex() << " created" << endl;
     availablePCBIndex->pop();
+    scheduler();
 }
     // delete myNewPCB          <---
 
@@ -125,8 +126,8 @@ void Manager::destroy(int integer){
 	//for all k in children of j destroy(k)
     int count = recDestroy(integer, 0);
 
-    cout << count << " processes destroyed" << endl;
-
+    //cout << count << " processes destroyed" << endl;
+    scheduler();
 	//display: "n processes destroyed"
 
     
@@ -190,7 +191,8 @@ void Manager::release(int integer){
        r->changeState();
    }*/
     // Q: should this be called only when re(r) or also when destroy(p)?
-   cout << "resource " << integer << " realeased" << endl; 
+   //cout << "resource " << integer << " realeased" << endl; 
+   scheduler();
 }
 
 void Manager::releaseFromProcess(int resource, int* process){
@@ -228,6 +230,7 @@ void Manager::scheduler(){
 	find process i currently at the head of RL
 	display: "process i running"
     */
-   cout << "Process " << *readyList->getFirst() << " running" << endl;;
+   //cout << "Process " << *readyList->getFirst() << " running" << endl;;
+   cout << *readyList->getFirst() << " ";
 }
 

@@ -29,37 +29,37 @@ void shell(string commands){
     string command = getFirstWord(commands);
     if (command == string("in")){
         //TODO init()
-        cout << "init" << endl;
+        //cout << "init" << endl;
         manager = new Manager();
 
     }
     else if (command == string("cr")){
         integer = stoi(getNextWord(commands));
         manager->create(integer);
-        cout << "cr" << " " << "Integer: " << integer << endl;
+        //cout << "cr" << " " << "Integer: " << integer << endl;
     }
     else if (command == string("de")){
         //TODO destroy()
         integer = stoi(getNextWord(commands));
         manager->destroy(integer);
-        cout << "destroy" << endl;
+        //cout << "destroy" << endl;
     }
     else if (command == string("rq")){
         //TODO request()
         integer = stoi(getNextWord(commands));
         manager->request(integer);
-        cout << "request" << " " << "Integer: " << integer << endl;
+        //cout << "request" << " " << "Integer: " << integer << endl;
     }
     else if (command == string("rl")){
         //TODO release()
         integer = stoi(getNextWord(commands));
         manager->release(integer);
-        cout << "release" << " " << "Integer: " << integer << endl;
+        //cout << "release" << " " << "Integer: " << integer << endl;
     }
     else if (command == string("to")){
         //TODO timeout()
         manager->timeout();
-        cout << "Timeout" << endl;
+        //cout << "Timeout" << endl;
     }
     else {
         cout << "-1" << endl;
