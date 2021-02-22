@@ -21,6 +21,7 @@ public:
 RCB::RCB()
 {
     _state = true;
+    _waitlist = new LinkedListInt();
 }
 
 RCB::~RCB()

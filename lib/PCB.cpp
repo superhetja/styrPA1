@@ -43,7 +43,8 @@ PCB::PCB(int priority) {
     // TODO: child and resources = null
     _state = true;
     _priority = priority;
-    
+    _children = new LinkedListInt();
+    _resources = new LinkedListInt();
 }
 
 PCB::~PCB() {
@@ -73,7 +74,9 @@ void PCB::addResources(int resource){
 }
 
 void PCB::removeResource(int resource){
+    cout << "inside remove" <<endl;
     _resources->removeNode(resource);
+    cout << "after remove" <<endl;
 }
 
 
@@ -104,8 +107,10 @@ LinkedListInt* PCB::getResources(){
 }
 
 ostream& operator<<(ostream& out, const PCB *pcb){
-    out << "PCB data: ( state: ";
+    out << "PCB( state: ";
     out << pcb->_state;
+    out << " index: ";
+    out << pcb -> _PCBIndex;
     out << ")";
     return out;
 }

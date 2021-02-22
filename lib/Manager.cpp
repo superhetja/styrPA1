@@ -52,6 +52,7 @@ Manager::Manager(){
     
 
     create(0);
+
 }
 
 // Deconstructor
@@ -66,10 +67,11 @@ void Manager::create(int priority){
     // allocate new PCB[j]
     PCB* myNewPCB = new PCB(priority);
     processes[availablePCBIndex->front()] = myNewPCB;
+    myNewPCB->setIndex(availablePCBIndex->front());
     // insert j into list of children i
     // (j is the new process, i is its parent)
     if (!readyList.empty()){
-        readyList.front()->addChild(availablePCBIndex->front());
+        readyList.front()->addChild(myNewPCB->getIndex());
         myNewPCB->setParent(readyList.front());
     }
     // parent = i
@@ -78,7 +80,7 @@ void Manager::create(int priority){
     //insert j into RL (ready list)
     readyList.push(myNewPCB);
     // display "process j created"
-    cout << "Process " << myNewPCB << " created" << endl;
+    cout << "Process " << myNewPCB->getIndex() << " created" << endl;
     availablePCBIndex->pop();
 }
     // delete myNewPCB          <---
@@ -150,6 +152,7 @@ void Manager::request(int integer){
        p->changeState();
        r->addToWaitList(index);
        cout << "process " << p << " blocked" << endl;
+       readyList.pop();
        scheduler();
        delete p;
    }
@@ -190,12 +193,14 @@ void Manager::releaseFromProcess(int resource, PCB* process){
 
     process->removeResource(resource);
     if(r->hasWaitingProcesses()){
-        PCB* j = r->popWatingList();
+        cout << "here" <<endl;
+        PCB* j = processes[r->popWatingList()];
         readyList.push(j);
         j->changeState();
         j->addResources(resource);
 
     } else {
+        cout << "esle" <<endl;
         r->changeState();
     }
 }

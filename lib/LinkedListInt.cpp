@@ -22,8 +22,8 @@ public:
 };
 
 LinkedListInt::LinkedListInt() {
-    head = NULL;
-    tail = NULL;
+    head = nullptr;
+    tail = nullptr;
 }
 
 LinkedListInt::~LinkedListInt() {
@@ -33,15 +33,16 @@ LinkedListInt::~LinkedListInt() {
 void LinkedListInt::createNode(int i){
     NodeInt *temp = new NodeInt();
     temp->data = i;
-    temp->next = NULL;
-    if(head == NULL){
+    temp->next = nullptr;
+    cout << "CREATE NODE "<< i <<endl;
+    if(head == nullptr){
         head = temp;
         tail = temp;
     } else {
         tail->next = temp;
         tail = temp;
     }
-    temp = NULL;
+    temp = nullptr;
 }
 
 // is this right with only 1 or 2 nodes?
@@ -52,12 +53,12 @@ void LinkedListInt::removeNode(int i){
         head = temp->next;
         }
     else {
-        while (temp->next != NULL ){
+        while (temp->next != nullptr ){
             if (temp->next->data == i){
                 NodeInt* node = temp->next;
                 if (temp->next == tail){
                     tail = temp;
-                    tail->next = NULL;
+                    tail->next = nullptr;
                 } else {
                     temp->next = temp->next->next;
                 }
@@ -76,7 +77,7 @@ NodeInt* LinkedListInt::getHead(){
 }
 
 bool LinkedListInt::isEmpty(){
-    return head == NULL;
+    return head == nullptr;
 }
 
 int LinkedListInt::removeFirst(){
