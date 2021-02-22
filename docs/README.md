@@ -5,5 +5,6 @@
 ## How to compile & Run
 '''
     g++ -std=c++11 main.cpp -o myProject &&./myProject input.txt
+     g++ -std=c++11 text.cpp -o test &&./test
 '''
 ## Anything else
