@@ -193,14 +193,12 @@ void Manager::releaseFromProcess(int resource, PCB* process){
 
     process->removeResource(resource);
     if(r->hasWaitingProcesses()){
-        cout << "here" <<endl;
         PCB* j = processes[*r->popWatingList()];
         readyList.push(j);
         j->changeState();
         j->addResources(resource);
 
     } else {
-        cout << "esle" <<endl;
         r->changeState();
     }
 }

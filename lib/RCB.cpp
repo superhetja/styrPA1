@@ -30,10 +30,7 @@ RCB::~RCB()
 
 void RCB::addToWaitList(int process){
     _waitlist->createNode(new int(process));
-    _waitlist->doStuff();
-    int* i = _waitlist->getSize();
-    cout << i << endl;
-    _waitlist->doStuff();
+
 }
 
 bool RCB::isFree(){
@@ -45,9 +42,7 @@ void RCB::removeProcess(int process){
 }
 
 bool RCB::hasWaitingProcesses(){
-    cout <<"HERE"<<endl;
     NodeInt* n = _waitlist->getHead();
-    cout << n->data<<endl;
     return _waitlist->getSize() != 0;
 }
 
